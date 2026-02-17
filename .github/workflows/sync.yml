@@ -10,36 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+    strategy:
+      matrix:
+        search:
+          - type: issues
+            args: --label topic-JIT
+          - type: prs
+            args: --label topic-JIT
+          - type: issues
+            args: --label OS-wasi
+          - type: prs
+            args: --label OS-wasi
+          - type: issues
+            args: --match title argparse
+          - type: prs
+            args: --match title argparse
+          - type: prs
+            args: --review-requested @me
     steps:
-      - name: Debug auth
-        run: gh auth status
-
-      - name: Sync JIT issues and PRs
+      - name: Sync ${{ matrix.search.type }} (${{ matrix.search.args }})
         run: |
-          echo "Searching..."
-          URLS=$(gh search issues --repo python/cpython --label topic-JIT --state open --limit 200 --json url --jq '.[].url')
-          echo "Found: $URLS"
-          echo "$URLS" | while read -r url; do
-            echo "Adding $url"
-            gh project item-add 10 --owner @me --url "$url"
-          done
-
-      - name: Sync WASI issues and PRs
-        run: |
-          echo "Searching..."
-          URLS=$(gh search issues --repo python/cpython --label OS-wasi --state open --limit 200 --json url --jq '.[].url')
-          echo "Found: $URLS"
-          echo "$URLS" | while read -r url; do
-            echo "Adding $url"
-            gh project item-add 10 --owner @me --url "$url"
-          done
-
-      - name: Sync argparse issues and PRs
-        run: |
-          echo "Searching..."
-          URLS=$(gh search issues --repo python/cpython --match title argparse --state open --limit 200 --json url --jq '.[].url')
-          echo "Found: $URLS"
-          echo "$URLS" | while read -r url; do
+          gh search ${{ matrix.search.type }} --repo python/cpython --state open --limit 200 ${{ matrix.search.args }} --json url --jq '.[].url' | while read -r url; do
             echo "Adding $url"
             gh project item-add 10 --owner @me --url "$url"
           done
