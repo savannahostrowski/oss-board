@@ -11,17 +11,35 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
     steps:
+      - name: Debug auth
+        run: gh auth status
+
       - name: Sync JIT issues and PRs
         run: |
-          gh search issues --repo python/cpython --label topic-JIT --state open --limit 200 --json url --jq '.[].url' | \
-            xargs -I {} gh project item-add 10 --owner savannahostrowski --url {} 2>/dev/null || true
+          echo "Searching..."
+          URLS=$(gh search issues --repo python/cpython --label topic-JIT --state open --limit 200 --json url --jq '.[].url')
+          echo "Found: $URLS"
+          echo "$URLS" | while read -r url; do
+            echo "Adding $url"
+            gh project item-add 10 --owner savannahostrowski --url "$url"
+          done
 
       - name: Sync WASI issues and PRs
         run: |
-          gh search issues --repo python/cpython --label OS-wasi --state open --limit 200 --json url --jq '.[].url' | \
-            xargs -I {} gh project item-add 10 --owner savannahostrowski --url {} 2>/dev/null || true
+          echo "Searching..."
+          URLS=$(gh search issues --repo python/cpython --label OS-wasi --state open --limit 200 --json url --jq '.[].url')
+          echo "Found: $URLS"
+          echo "$URLS" | while read -r url; do
+            echo "Adding $url"
+            gh project item-add 10 --owner savannahostrowski --url "$url"
+          done
 
       - name: Sync argparse issues and PRs
         run: |
-          gh search issues --repo python/cpython --match title argparse --state open --limit 200 --json url --jq '.[].url' | \
-            xargs -I {} gh project item-add 10 --owner savannahostrowski --url {} 2>/dev/null || true
+          echo "Searching..."
+          URLS=$(gh search issues --repo python/cpython --match title argparse --state open --limit 200 --json url --jq '.[].url')
+          echo "Found: $URLS"
+          echo "$URLS" | while read -r url; do
+            echo "Adding $url"
+            gh project item-add 10 --owner savannahostrowski --url "$url"
+          done
