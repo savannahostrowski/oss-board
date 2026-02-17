@@ -21,7 +21,7 @@ jobs:
           echo "Found: $URLS"
           echo "$URLS" | while read -r url; do
             echo "Adding $url"
-            gh project item-add 10 --owner savannahostrowski --url "$url"
+            gh project item-add 10 --owner @me --url "$url"
           done
 
       - name: Sync WASI issues and PRs
@@ -31,7 +31,7 @@ jobs:
           echo "Found: $URLS"
           echo "$URLS" | while read -r url; do
             echo "Adding $url"
-            gh project item-add 10 --owner savannahostrowski --url "$url"
+            gh project item-add 10 --owner @me --url "$url"
           done
 
       - name: Sync argparse issues and PRs
@@ -41,5 +41,5 @@ jobs:
           echo "Found: $URLS"
           echo "$URLS" | while read -r url; do
             echo "Adding $url"
-            gh project item-add 10 --owner savannahostrowski --url "$url"
+            gh project item-add 10 --owner @me --url "$url"
           done
