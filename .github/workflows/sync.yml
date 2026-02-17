@@ -10,19 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
-      PROJECT_URL: https://github.com/users/savannahostrowski/projects/10
     steps:
       - name: Sync JIT issues and PRs
         run: |
           gh search issues --repo python/cpython --label topic-JIT --state open --limit 200 --json url --jq '.[].url' | \
-            xargs -I {} gh project item-add "$PROJECT_URL" --url {} 2>/dev/null || true
+            xargs -I {} gh project item-add 10 --owner savannahostrowski --url {} 2>/dev/null || true
 
       - name: Sync WASI issues and PRs
         run: |
           gh search issues --repo python/cpython --label OS-wasi --state open --limit 200 --json url --jq '.[].url' | \
-            xargs -I {} gh project item-add "$PROJECT_URL" --url {} 2>/dev/null || true
+            xargs -I {} gh project item-add 10 --owner savannahostrowski --url {} 2>/dev/null || true
 
       - name: Sync argparse issues and PRs
         run: |
           gh search issues --repo python/cpython --match title argparse --state open --limit 200 --json url --jq '.[].url' | \
-            xargs -I {} gh project item-add "$PROJECT_URL" --url {} 2>/dev/null || true
+            xargs -I {} gh project item-add 10 --owner savannahostrowski --url {} 2>/dev/null || true
